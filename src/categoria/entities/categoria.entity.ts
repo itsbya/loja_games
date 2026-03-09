@@ -4,23 +4,27 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Produto } from "../../produto/entities/produto.entity";
 
 
-@Entity({name: "tb_categorias"}) // CREATE TABLE tb_categorias
+@Entity({name: "tb_categorias"}) 
 export class Categoria{
-
-    @PrimaryGeneratedColumn() // PRIMARY KEY(id) AUTO INCREMENT
+    
+    @PrimaryGeneratedColumn() 
     id: number;
 
-   @Transform(({value} : TransformFnParams) => value?.trim()) // Remover espaços em branco 
-   @IsNotEmpty() //Força digitação
-   @Column({length: 100, nullable: false})// VARCHAR(100) NOT NULL
-    nome: string;
 
-   @IsNotEmpty() //Força digitação
-   @Column({length: 255, nullable: false})// VARCHAR(255) NOT NULL
+   //REGISTRO DO NOME
+   @Transform(({value} : TransformFnParams) => value?.trim()) 
+   @IsNotEmpty() 
+   @Column({length: 100, nullable: false})
+    nome: string;
+   
+
+   //REGISTRO DA DESCRIÇÃO
+   @IsNotEmpty() 
+   @Column({length: 255, nullable: false})
    descricao: string;
 
    
-    //Relacionamento com categoria
+    //Relacionamento com Produto
     @OneToMany(() => Produto,(produto)=> produto.categoria)
     produto: Produto[];
    

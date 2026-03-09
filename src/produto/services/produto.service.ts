@@ -2,18 +2,18 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Produto } from "../entities/produto.entity";
 import { DeleteResult, ILike, Repository } from "typeorm";
-import { CategoriaService } from "../../categoria/services/categoria.service";
+
 
 @Injectable()
 export class ProdutoService{
     constructor(
         @InjectRepository(Produto)
         private produtoRepository: Repository<Produto>,
-        private readonly categoriaService: CategoriaService
     ){}
 
+    // PROCURAR TODOS
     async findAll(): Promise<Produto[]>{
-        // SELECT * FROM tb_produtos
+        
         return this.produtoRepository.find({
           relations:{
                 categoria:true
@@ -21,8 +21,10 @@ export class ProdutoService{
         })
     }
 
+
+    // PROCURAR POR ID
     async findById(id: number): Promise<Produto>{
-        // Select * FROM tb_produtos WHERE id = ?;
+        
         const produto = await this.produtoRepository.findOne({
               where: {
                 id
@@ -37,9 +39,10 @@ export class ProdutoService{
 
         return produto;
 }
-
+       
+       // PROCURAR POR DESCRIÇÃO
        async findAllByDescricao(descricao: string): Promise<Produto[]>{
-    // SELECT * FROM tb_produtos WHERE descricao LIKE '%?%';
+    
     return this.produtoRepository.find({
       where:{
         descricao: ILike(`%${descricao}%`)
@@ -50,34 +53,34 @@ export class ProdutoService{
     })
   }
 
+  
+ // CRIAR PRODUTO
   async create(produto: Produto): Promise<Produto>{
 
-
-    // INSERT INTO tb_produtos (nome, descrição, preço) VALUES (?, ?);
     return this.produtoRepository.save(produto);
   }
 
+
+// ATUALIZAR PRODUTO
   async update(produto: Produto): Promise<Produto>{
 
     if (!produto.id || produto.id <= 0)
       throw new HttpException("O ID da produto é inválido!", HttpStatus.BAD_REQUEST);
 
-    // Checa se a produto existe
+    
     await this.findById(produto.id);
-
-
-    //Checa se a Categoria do Produto existe
-    await this.categoriaService.findById(produto.categoria.id);
     
 
     return this.produtoRepository.save(produto);
   }
 
+
+// DELETAR PRODUTO
   async delete(id: number): Promise<DeleteResult>{
     
     await this.findById(id);
 
-    // DELETE tb_produtos FROM id = ?;
+    
     return this.produtoRepository.delete(id);
     
   }
