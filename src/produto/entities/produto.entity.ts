@@ -1,6 +1,8 @@
 import { Transform, TransformFnParams } from "class-transformer";
-import { IsNotEmpty } from "class-validator";
-import { Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import { IsNotEmpty, IsNumber, IsPositive } from "class-validator";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import { Categoria } from "../../categoria/entities/categoria.entity";
+import { NumericTransformer } from "../../../util/numericTransformer";
 
 
 
@@ -10,7 +12,7 @@ export class Produto{
     @PrimaryGeneratedColumn() // PRIMARY KEY(id) AUTO INCREMENT
     id: number;
 
-   @Transform(({value} : TransformFnParams) => value?.trim()) // Remover espaços em branco 
+   @Transform(({value} : TransformFnParams) => value?.trim()) 
    @IsNotEmpty() //Força digitação
    @Column({length: 100, nullable: false})// VARCHAR(100) NOT NULL
     nome: string;
@@ -19,13 +21,22 @@ export class Produto{
    @Column({length: 255, nullable: false})// VARCHAR(255) NOT NULL
    descricao: string;
    
-    @Column({ type: 'decimal', precision: 10, scale: 2 })
+    @IsNumber({ maxDecimalPlaces: 2 })
+    @IsNotEmpty()
+    @IsPositive()
+    @Column({ type: "decimal", precision: 10, scale: 2, transformer: new NumericTransformer() })
     preco: number;
 
-     /*
-    //Relacionamento com categoria
-    @OneToMany(() => Categoria, (categoria)=> categoria.produto)
-    categoria: Categoria[];
-    */
+
+    @
+
+
+
+
+     //Relacionamento com produto
+    @ManyToOne(() => Categoria, (categoria) => categoria.produto,{
+        onDelete: "CASCADE"
+    })
+    categoria: Categoria;
 
 }

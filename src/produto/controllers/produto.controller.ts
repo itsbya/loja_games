@@ -3,7 +3,7 @@ import { Produto } from "../entities/produto.entity";
 import { ProdutoService } from "../services/produto.service";
 
 
-@Controller("/temas")
+@Controller("/produto")
 export class ProdutoController {
 
     constructor(
@@ -16,13 +16,13 @@ export class ProdutoController {
     return this.produtoService.findAll();
   }
 
-  @Get("/:id")
+  @Get("id/:id")
   @HttpCode(HttpStatus.OK)
   findById(@Param("id", ParseIntPipe) id: number): Promise<Produto>{
     return this.produtoService.findById(id);
   }
 
-  @Get("/descricao/:descricao")
+  @Get("descricao/:descricao")
   @HttpCode(HttpStatus.OK)
   findAllByDescricao(@Param("descricao") descricao: string): Promise<Produto[]>{
     return this.produtoService.findAllByDescricao(descricao);

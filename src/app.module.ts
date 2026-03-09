@@ -2,21 +2,26 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProdutoModule } from './produto/produto.module';
 import { Produto } from './produto/entities/produto.entity';
+import { Categoria } from './categoria/entities/categoria.entity';
+import { CategoriaModule } from './categoria/categoria.module';
+
 
 
 
 @Module({
-  imports: [  TypeOrmModule.forRoot({
+  imports: [ 
+    TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
       password: '7803luxO.',
       database: 'db_loja_de_games',
-      entities: [Produto],
+      entities: [Produto, Categoria],
       synchronize: true,
     }),
-  ProdutoModule,
+  ProdutoModule, 
+  CategoriaModule
   ],
   controllers: [],
   providers: [],
