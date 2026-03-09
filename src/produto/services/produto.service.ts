@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Produto } from "../entities/produto.entity";
-import { DeleteResult, ILike, Repository } from "typeorm";
+import { DeleteResult, ILike, LessThan, MoreThan, Repository } from "typeorm";
 
 
 @Injectable()
@@ -52,6 +52,47 @@ export class ProdutoService{
             } 
     })
   }
+
+
+   // PROCURAR POR VALOR MAIOR QUE 300
+   async FindAllByMaiorPreco(preco: number): Promise<Produto[]>{
+        const maior = await this.produtoRepository.find({
+           where:{ 
+            preco: MoreThan(preco)},
+            relations:{
+                categoria: true
+            },
+            order: {
+            preco: "ASC"
+        }
+        })
+
+        if(!maior.length)
+         throw new HttpException('Produto não encontrado!', HttpStatus.NOT_FOUND)     
+        return maior; 
+    }
+
+
+
+     // PROCURAR POR VALOR MENOR QUE 300
+    async FindAllByMenorPreco(preco: number): Promise<Produto[]>{
+        const menor = await this.produtoRepository.find({
+            
+            where: {
+                preco: LessThan(preco)}, 
+            relations:{
+                categoria: true
+            },    
+            order: {
+            preco: "DESC"
+        }
+        })
+
+        if(!menor.length)
+         throw new HttpException('Produto não encontrado!', HttpStatus.NOT_FOUND)     
+        return menor; 
+    }
+
 
   
  // CRIAR PRODUTO

@@ -26,7 +26,24 @@ export class ProdutoController {
   @HttpCode(HttpStatus.OK)
   findAllByDescricao(@Param("descricao") descricao: string): Promise<Produto[]>{
     return this.produtoService.findAllByDescricao(descricao);
-  }
+  } 
+
+
+   //FILTRO EXTRA
+   @Get('preco/maior/:preco')
+    @HttpCode(HttpStatus.OK)
+    findAllByMaiorPreco(@Param('preco', ParseIntPipe) preco: number):Promise<Produto[]>{
+        return this.produtoService.FindAllByMaiorPreco(preco);
+    }
+
+
+    //FILTRO EXTRA
+    @Get('preco/menor/:preco')
+    @HttpCode(HttpStatus.OK)
+    findAllByMenorPreco(@Param('preco', ParseIntPipe) preco: number):Promise<Produto[]>{
+        return this.produtoService.FindAllByMenorPreco(preco);
+    }
+    
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
