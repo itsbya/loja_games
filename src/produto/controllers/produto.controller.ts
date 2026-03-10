@@ -1,65 +1,77 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
-import { Produto } from "../entities/produto.entity";
-import { ProdutoService } from "../services/produto.service";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { Produto } from '../entities/produto.entity';
+import { ProdutoService } from '../services/produto.service';
 
-
-@Controller("/produto")
+@Controller('/produtos')
 export class ProdutoController {
+  constructor(private readonly produtoService: ProdutoService) {}
 
-    constructor(
-        private readonly produtoService: ProdutoService
-    ){}
-
-     @Get()
+  @Get()
   @HttpCode(HttpStatus.OK)
-  findAll(): Promise<Produto[]>{
+  findAll(): Promise<Produto[]> {
     return this.produtoService.findAll();
   }
 
-  @Get("id/:id")
+  @Get('id/:id')
   @HttpCode(HttpStatus.OK)
-  findById(@Param("id", ParseIntPipe) id: number): Promise<Produto>{
+  findById(@Param('id', ParseIntPipe) id: number): Promise<Produto> {
     return this.produtoService.findById(id);
   }
 
-  @Get("descricao/:descricao")
+  @Get('descricao/:descricao')
   @HttpCode(HttpStatus.OK)
-  findAllByDescricao(@Param("descricao") descricao: string): Promise<Produto[]>{
+  findAllByDescricao(
+    @Param('descricao') descricao: string,
+  ): Promise<Produto[]> {
     return this.produtoService.findAllByDescricao(descricao);
-  } 
+  }
 
+  //FILTRO EXTRA
+  @Get('maior/preco/:preco')
+  @HttpCode(HttpStatus.OK)
+  findAllByMaiorPreco(
+    @Param('preco', ParseIntPipe) preco: number,
+  ): Promise<Produto[]> {
+    return this.produtoService.FindAllByMaiorPreco(preco);
+  }
 
-   //FILTRO EXTRA
-   @Get('preco/maior/:preco')
-    @HttpCode(HttpStatus.OK)
-    findAllByMaiorPreco(@Param('preco', ParseIntPipe) preco: number):Promise<Produto[]>{
-        return this.produtoService.FindAllByMaiorPreco(preco);
-    }
-
-
-    //FILTRO EXTRA
-    @Get('preco/menor/:preco')
-    @HttpCode(HttpStatus.OK)
-    findAllByMenorPreco(@Param('preco', ParseIntPipe) preco: number):Promise<Produto[]>{
-        return this.produtoService.FindAllByMenorPreco(preco);
-    }
-    
+  //FILTRO EXTRA
+  @Get('menor/preco/:preco')
+  @HttpCode(HttpStatus.OK)
+  findAllByMenorPreco(
+    @Param('preco', ParseIntPipe) preco: number,
+  ): Promise<Produto[]> {
+    return this.produtoService.FindAllByMenorPreco(preco);
+  }
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  create(@Body() produto: Produto): Promise<Produto>{
+  create(@Body() produto: Produto): Promise<Produto> {
     return this.produtoService.create(produto);
   }
 
+
   @Put()
   @HttpCode(HttpStatus.OK)
-  update(@Body() produto: Produto): Promise<Produto>{
+  update(@Body() produto: Produto): Promise<Produto> {
     return this.produtoService.update(produto);
   }
 
-  @Delete("/:id")
+
+  @Delete('/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param("id", ParseIntPipe) id: number){
+  delete(@Param('id', ParseIntPipe) id: number) {
     return this.produtoService.delete(id);
   }
 }

@@ -54,7 +54,7 @@ export class ProdutoService{
   }
 
 
-   // PROCURAR POR VALOR MAIOR QUE 300
+   // PROCURAR POR VALOR MAIOR QUE PREÇO
    async FindAllByMaiorPreco(preco: number): Promise<Produto[]>{
         const maior = await this.produtoRepository.find({
            where:{ 
@@ -74,7 +74,7 @@ export class ProdutoService{
 
 
 
-     // PROCURAR POR VALOR MENOR QUE 300
+     // PROCURAR POR VALOR MENOR QUE PREÇO
     async FindAllByMenorPreco(preco: number): Promise<Produto[]>{
         const menor = await this.produtoRepository.find({
             
